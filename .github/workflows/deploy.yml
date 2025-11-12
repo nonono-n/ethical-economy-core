@@ -41,7 +41,7 @@ permissions:
 #            --region $AWS_REGION
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -55,4 +55,25 @@ jobs:
 
       - name: Verify AWS Identity
         run: aws sts get-caller-identity
+
+      - name: Set up Qemu
+        uses: docker/setup-qemu-action@v2
+
+      - name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+       # build, tag, push image to ECR
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ secrets.ECR_REPO }}:latest .
+          docker tag ${{ secrets.ECR_REPO }}:latest ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPO }}:latest
+      - name: Push to ECR
+        run: |
+          docker push ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPO }}:latest
+      - name: Update Lambda function
+        run: |
+          aws lambda update-function-code \
+            --function-name MyFastAPIFunction \
+            --image-uri ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPO }}:latest \
+            --region ${{ secrets.AWS_REGION }}
 
