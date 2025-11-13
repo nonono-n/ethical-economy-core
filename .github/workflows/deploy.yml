@@ -34,8 +34,12 @@ jobs:
         uses: docker/setup-qemu-action@v3
 
       # ⑤ ECRログイン
-      - name: Login to ECR
-        uses: aws-actions/amazon-ecr-login@v2
+      # - name: Login to ECR
+      #   uses: aws-actions/amazon-ecr-login@v2
+      - name: Manual ECR login (debug)
+        run: |
+          aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | \
+          docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
 
       # ⑥ Dockerビルド＆タグ付け
       - name: Build Docker image
