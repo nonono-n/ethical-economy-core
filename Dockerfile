@@ -1,10 +1,13 @@
+# ---- ベースイメージ（AWS Lambda公式）----
 FROM public.ecr.aws/lambda/python:3.10
 
-# Copy function code
-COPY main.py requirements.txt ${LAMBDA_TASK_ROOT}/
+# ---- 依存パッケージのコピーとインストール ----
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install dependencies
-RUN pip install -r requirements.txt
+# ---- アプリ本体をコピー ----
+COPY main.py .
 
-# Set the CMD to your handler (could be main.handler)
+# ---- Lambdaエントリーポイント ----
+# （handlerはmain.py内のMangumインスタンス名）
 CMD ["main.handler"]
