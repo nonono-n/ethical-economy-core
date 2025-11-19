@@ -12,4 +12,5 @@ def read_item(item_id: int, q: str | None = None):
     return {"item_id": item_id, "query": q}
 
 # Lambda用のハンドラー
-handler = Mangum(app)
+handler = Mangum(app, api_gateway_base_path="/default")
+
