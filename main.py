@@ -13,4 +13,3 @@ def read_item(item_id: int, q: str | None = None):
 
 # Lambda用のハンドラー
 handler = Mangum(app)
-
