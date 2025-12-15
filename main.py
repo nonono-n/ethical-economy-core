@@ -36,7 +36,8 @@ def dbtest():
             dbname=secret["dbname"],
             user=secret["user"],
             password=secret["password"],
-            port=secret["port"]
+            port=secret["port"],
+            connect_timeout=5,  # 追加
         )
 
         cur = conn.cursor()
