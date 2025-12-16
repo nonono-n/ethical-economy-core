@@ -25,6 +25,10 @@ def get_db_info():
     secret = json.loads(response["SecretString"])
     return secret
 
+@app.get("/secrettest")
+def secrettest():
+    secret = get_db_info()
+    return {"ok": True, "keys": list(secret.keys())}
 
 @app.get("/dbtest")
 def dbtest():
