@@ -40,7 +40,7 @@ def dbtest():
             dbname=secret["dbname"],
             user=secret["user"],
             password=secret["password"],
-            port=secret["port"],
+            port=int(secret["port"]),
             connect_timeout=5,  # 追加
         )
 
